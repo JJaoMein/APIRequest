@@ -734,7 +734,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7e769041c02d6e4f90470125bf8f8aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rickAndMortyApi: https://rickandmortyapi.com/api
-  myApi: 
-  characterId: 1
   yourRawImage: {fileID: 1826006816}
