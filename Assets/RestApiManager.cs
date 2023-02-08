@@ -4,14 +4,17 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using static System.Net.WebRequestMethods;
+using UnityEngine.TextCore.Text;
 
 public class RestApiManager : MonoBehaviour
 {
 
     //[SerializeField] string rickAndMortyApi = "https://rickandmortyapi.com/api/character/";
-    //[SerializeField]public string myApi = "https://my-json-server.typicode.com/JJaoMein/TempJSONServer/users/";
+    //[SerializeField]public string myApi = "https://my-json-server.typicode.com/JJaoMein/TempJSONServer/user";
     //[SerializeField] int characterId = 1;
-    [SerializeField] RawImage yourRawImage;
+    //[SerializeField] int userId = 1;
+    [SerializeField] List<RawImage> yourRawImage;
+
 
     void Start()
     {
@@ -42,10 +45,12 @@ public class RestApiManager : MonoBehaviour
                 Debug.Log("User ID: " + myUser.id);
                 Debug.Log("User Name: " + myUser.name);
 
-                foreach (int cardId in myUser.deck)
-                {
-                    Debug.Log(cardId);
-                }
+                //for (int i = 0; i < myUser.deck.Length; i++)
+                //{
+                //    StartCoroutine(GetCharacter(myUser.deck[i],i));
+                    
+                //}
+
             }
             else
             {
@@ -57,9 +62,9 @@ public class RestApiManager : MonoBehaviour
         }
     }
 
-    IEnumerator GetCharacter()
+    IEnumerator GetCharacter(int characterId, int imageNumber)
     {
-        UnityWebRequest www = UnityWebRequest.Get("https://rickandmortyapi.com/api/character");
+        UnityWebRequest www = UnityWebRequest.Get("https://rickandmortyapi.com/api/character" + characterId.ToString());
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.ConnectionError)
@@ -72,15 +77,9 @@ public class RestApiManager : MonoBehaviour
 
             if (www.responseCode == 200)
             {
+                Character card = JsonUtility.FromJson<Character>(www.downloadHandler.text);
 
-                CharacterList characters = JsonUtility.FromJson<CharacterList>(www.downloadHandler.text);
-
-                foreach (Character character in characters.results)
-                {
-                    Debug.Log("Name: " + character.name);
-                    Debug.Log("Image: " + character.image);
-                    StartCoroutine(GetImage(character.image));
-                }
+                StartCoroutine(GetImage(card.image, imageNumber));
             }
             else
             {
@@ -92,7 +91,7 @@ public class RestApiManager : MonoBehaviour
         }
     }
 
-    IEnumerator GetImage(string MediaUrl)
+    IEnumerator GetImage(string MediaUrl, int imageNumber)
     {
         UnityWebRequest request = UnityWebRequestTexture.GetTexture(MediaUrl);
         yield return request.SendWebRequest();
@@ -102,7 +101,7 @@ public class RestApiManager : MonoBehaviour
         }
         else 
         {
-            yourRawImage.texture = ((DownloadHandlerTexture)request.downloadHandler).texture; 
+            yourRawImage[imageNumber].texture = ((DownloadHandlerTexture)request.downloadHandler).texture; 
         }
     }
 }
