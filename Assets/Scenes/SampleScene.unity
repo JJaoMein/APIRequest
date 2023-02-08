@@ -674,7 +674,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1865800066}
         m_TargetAssemblyTypeName: RestApiManager, Assembly-CSharp
-        m_MethodName: ActionOnCLick
+        m_MethodName: RequestOnCLick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
