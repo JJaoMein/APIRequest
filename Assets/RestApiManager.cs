@@ -9,10 +9,6 @@ using UnityEngine.TextCore.Text;
 public class RestApiManager : MonoBehaviour
 {
 
-    //[SerializeField] string rickAndMortyApi = "https://rickandmortyapi.com/api/character/";
-    //[SerializeField]public string myApi = "https://my-json-server.typicode.com/JJaoMein/TempJSONServer/user";
-    //[SerializeField] int characterId = 1;
-    //[SerializeField] int userId = 1;
     [SerializeField] List<RawImage> yourRawImage;
 
 
@@ -28,7 +24,7 @@ public class RestApiManager : MonoBehaviour
 
     IEnumerator GetUsers()
     {
-        UnityWebRequest www = UnityWebRequest.Get("https://my-json-server.typicode.com/JJaoMein/TempJSONServer/users/1");
+        UnityWebRequest www = UnityWebRequest.Get("https://my-json-server.typicode.com/jaydeeay/JSONSV/users/1");
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.ConnectionError)
@@ -44,12 +40,17 @@ public class RestApiManager : MonoBehaviour
                 UserJsonData myUser = JsonUtility.FromJson<UserJsonData>(www.downloadHandler.text);
                 Debug.Log("User ID: " + myUser.id);
                 Debug.Log("User Name: " + myUser.name);
+                //Debug.Log(myUser.deck.Length);
 
-                //for (int i = 0; i < myUser.deck.Length; i++)
+                //foreach (int cardId in myUser.deck)
                 //{
-                //    StartCoroutine(GetCharacter(myUser.deck[i],i));
-                    
+                //    Debug.Log(cardId);
                 //}
+
+                for (int i = 0; i < myUser.deck.Length; i++)
+                {
+                    StartCoroutine(GetCharacter(myUser.deck[i], i));
+                }
 
             }
             else
@@ -64,7 +65,7 @@ public class RestApiManager : MonoBehaviour
 
     IEnumerator GetCharacter(int characterId, int imageNumber)
     {
-        UnityWebRequest www = UnityWebRequest.Get("https://rickandmortyapi.com/api/character" + characterId.ToString());
+        UnityWebRequest www = UnityWebRequest.Get("https://rickandmortyapi.com/api/character/" + characterId);
         yield return www.SendWebRequest();
 
         if (www.result == UnityWebRequest.Result.ConnectionError)
